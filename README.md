@@ -2,7 +2,7 @@
 
 # IDC PHP bindings
 
-The IDpack in the Cloud PHP library provides convenient access to the IDC API from applications written in the PHP language. The API is available with an IDC Professional or IDC Enterprise plan.
+The IDpack in the Cloud PHP library provides convenient access to the IDC API from applications written in PHP. The API is available with an IDC Professional or IDC Enterprise plan.
 
 ## Requirements
 
