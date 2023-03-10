@@ -91,7 +91,7 @@ public function get_record(
   $api_badge_preview_number=0
 ) : string
 ```
-When setting the api_photo_id to 1 with a valid api_photo_id_format, the API will include the Photo ID in the data structure. The same goes for the Badge Preview. With the api_badge_preview_number argument, you can request to get only the Font, Back, or Both within the data structure—Duplex (0) default, Front (1), or Back (2).
+When setting the api_photo_id to 1 with a valid api_photo_id_format, the API will include the Photo ID in the data structure. The same goes for the Badge Preview. Adding the api_badge_preview_number argument, you can request to get only the Font, Back, or Both within the data structure—Duplex (0) default, Front (1), or Back (2).
 
 ### Grab all records from a project in a JSON format.
 
