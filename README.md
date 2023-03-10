@@ -15,7 +15,7 @@ Not tested yet
 
 ## Documentation
 
-See the [PHP API docs](https://www.idpack.cloud/docs/api/) and the [API Reference](https://www.idpack.cloud/docs/api/producer/).
+See the [PHP API docs](https://www.idpack.cloud/docs/api/) and the [API Reference](https://www.idpack.cloud/docs/api/producer/). The database fields available can he found here: [IDC Database Fields](https://www.idpack.cloud/supported-database-fields/)
 
 ## Manual Setup
 
