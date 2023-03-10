@@ -15,7 +15,7 @@ Not tested yet
 
 ## Documentation
 
-See the [PHP API docs](https://www.idpack.cloud/docs/api/).
+See the [PHP API docs](https://www.idpack.cloud/docs/api/) and the [API Reference](https://www.idpack.cloud/docs/api/producer/).
 
 ## Manual Setup
 
@@ -118,7 +118,7 @@ echo $response;
 $insert_id = $idc->getInsertID();
 ```
 
-### delete a record in a project.
+### Delete a record in a project.
 
 ```php
 $response = $idc->delete_record(['idc_id_number' => '10000']);
