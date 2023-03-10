@@ -4,8 +4,8 @@
 
 The IDpack in the Cloud PHP library provides convenient access to the IDC API from applications written in the PHP language. The API is available with an IDC Professional or IDC Enterprise plan.
 
-Requirements
-========
+## Requirements
+
 PHP 5.6.0 and later.
 
 Not tested yet
@@ -13,8 +13,12 @@ Not tested yet
 * PHP 8.0
 * PHP 8.1
 
-Manual Setup
-========
+## Documentation
+
+See the [PHP API docs](https://www.idpack.cloud/docs/api/).
+
+## Manual Setup
+
 Include the `idc.class.php` file into your project and set it up like this:
 
 ```php
@@ -31,8 +35,8 @@ $idc->setUserSecretKey('user_secret_key');
 $idc->setProjectSecretKey('project_secret_key');
 ```
 
-Code Examples
-========
+## Code Examples
+
 ### Grab a record from a project in a JSON format.
 
 ```php
