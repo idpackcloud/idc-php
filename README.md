@@ -105,8 +105,9 @@ echo $response;
 
 ```php
 $response = $idc->update_record(['idc_id_number' => '10000'], [
-  'idc_firstname' => 'Julie', 
-  'idc_lastname' => 'Smith']);
+    'idc_firstname' => 'Julie', 
+    'idc_lastname' => 'Smith'
+  ]);
 echo $response;
 ```
 
@@ -114,9 +115,10 @@ echo $response;
 
 ```php
 $response = $idc->insert_record([
-  'idc_colorcode' => 2,
-  'idc_firstname' => 'Mark', 
-  'idc_lastname' => 'Morgan']);
+    'idc_colorcode' => 2,
+    'idc_firstname' => 'Mark', 
+    'idc_lastname' => 'Morgan'
+  ]);
 echo $response;
 
 //get the inserted primary key
