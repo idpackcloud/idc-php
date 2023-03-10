@@ -104,14 +104,19 @@ echo $response;
 ### Update a record from a project.
 
 ```php
-$response = $idc->update_record(['idc_id_number' => '10000'], ['idc_firstname' => 'Julie', 'idc_lastname' => 'Smith']);
+$response = $idc->update_record(['idc_id_number' => '10000'], [
+  'idc_firstname' => 'Julie', 
+  'idc_lastname' => 'Smith']);
 echo $response;
 ```
 
 ### Insert a record in a project.
 
 ```php
-$response = $idc->insert_record(['idc_colorcode' => 2, 'idc_firstname' => 'Mark', 'idc_lastname' => 'Morgan']);
+$response = $idc->insert_record([
+  'idc_colorcode' => 2,
+  'idc_firstname' => 'Mark', 
+  'idc_lastname' => 'Morgan']);
 echo $response;
 
 //get the inserted primary key
