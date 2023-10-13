@@ -3,19 +3,19 @@
 //============================================================+
 // File name   : idc.class.php
 // Begin       : 2022-12-07
-// Last Update : 2023-03-10
-// Author      : Martin Bourdages - IDpack in the Cloud - www.idpack.cloud - support@idpack.cloud
+// Last Update : 2023-10-13
+// Author      : Martin Bourdages - IDpack Cloud - www.idpack.cloud - support@idpack.cloud
 // License     : MIT
 // -------------------------------------------------------------------
-// Copyright (C) 2023 Martin Bourdages - IDpack in the Cloud
+// Copyright (C) 2023 Martin Bourdages - IDpack Cloud
 //
-// This file is part of IDpack in the Cloud library.
+// This file is part of IDpack Cloud library.
 //
 // See LICENSE file for more information.
 // -------------------------------------------------------------------
 //
 // Description :
-//    A PHP library for communicating with the IDpack in the Cloud REST API and accessing the Badge Producer from your system.
+//    A PHP library for communicating with the IDpack Cloud API and accessing the Badge Producer from your system.
 //
 //============================================================+
 
@@ -25,7 +25,7 @@
 
 class IDpack {
 
-	const VERSION = '1.3.072';
+	const VERSION = '2.0.001';
 
 	// Protected properties
 
