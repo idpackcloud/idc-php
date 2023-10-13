@@ -1,11 +1,11 @@
-[![idc-php](https://github.com/idpackcloud/idc-php/blob/main/examples/images/idpack-in-the-cloud.jpg)](https://github.com/idpackcloud/idc-php/blob/7e8be2e430e02a9dd8ed94dd5ae167f0b3b2b412/examples/images/idpack-in-the-cloud.jpg)
+[![idc-php](https://github.com/idpackcloud/idc-php/blob/main/examples/images/idpack_cloud.jpg)](https://github.com/idpackcloud/idc-php/blob/7e8be2e430e02a9dd8ed94dd5ae167f0b3b2b412/examples/images/idpack_cloud.jpg){:width="250px"}
 
 # IDC PHP bindings
 
 The IDpack Cloud PHP library provides convenient access to the IDC API from applications written in PHP. The API is available with an IDC Professional or IDC Enterprise plan.
 
-## Requirements
-
+Requirements
+========
 PHP 5.6.0 and later.
 
 Not tested yet
@@ -13,12 +13,8 @@ Not tested yet
 * PHP 8.0
 * PHP 8.1
 
-## Documentation
-
-See the [PHP API docs](https://www.idpack.cloud/docs/api/) and the [API Reference](https://www.idpack.cloud/docs/api/producer/). The database fields available can he found here: [IDC Database Fields](https://www.idpack.cloud/supported-database-fields/)
-
-## Manual Setup
-
+Manual Setup
+========
 Include the `idc.class.php` file into your project and set it up like this:
 
 ```php
@@ -28,15 +24,15 @@ $idc = new IDpack('username', 'password', 'user_secret_key', 'project_secret_key
 or
 ```php
 require_once 'idc.class.php';
-$idc = new IDpack();
+$idc = new IDpackCloud();
 $idc->setUsername('username');
 $idc->setPassword('password');
 $idc->setUserSecretKey('user_secret_key');
 $idc->setProjectSecretKey('project_secret_key');
 ```
 
-## Code Examples
-
+Code Examples
+========
 ### Grab a record from a project in a JSON format.
 
 ```php
@@ -73,25 +69,12 @@ echo $response;
   "api": {
     "api_action": "get_record", 
     "api_queries_remaining": 8345,
-    "api_software": "IDpack in the Cloud",
-    "api_version": "1.3.045",
+    "api_software": "IDpack Cloud",
+    "api_version": "2.0.001",
     "api_request_date": "2023-01-29 19:30:12"
   }
 }
 ```
-The get_record has many optional arguments you can pass to the function.
-
-```php
-public function get_record(
-  $api_primary_key=array(), 
-  $api_photo_id=0, 
-  $api_photo_id_format=null, 
-  $api_badge_preview=0, 
-  $api_badge_preview_format=null, 
-  $api_badge_preview_number=0
-) : string
-```
-When setting the api_photo_id to 1 with a valid api_photo_id_format, the API will include the Photo ID in the data structure. The same goes for the Badge Preview. Adding the api_badge_preview_number argument, you can request to get only the Font, Back, or Both within the data structure—Duplex (0) default, Front (1), or Back (2).
 
 ### Grab all records from a project in a JSON format.
 
@@ -117,21 +100,14 @@ echo $response;
 ### Update a record from a project.
 
 ```php
-$response = $idc->update_record(['idc_id_number' => '10000'], [
-    'idc_firstname' => 'Julie', 
-    'idc_lastname' => 'Smith'
-  ]);
+$response = $idc->update_record(['idc_id_number' => '10000'], ['idc_firstname' => 'Julie', 'idc_lastname' => 'Smith']);
 echo $response;
 ```
 
 ### Insert a record in a project.
 
 ```php
-$response = $idc->insert_record([
-    'idc_colorcode' => 2,
-    'idc_firstname' => 'Mark', 
-    'idc_lastname' => 'Morgan'
-  ]);
+$response = $idc->insert_record(['idc_colorcode' => 2, 'idc_firstname' => 'Mark', 'idc_lastname' => 'Morgan']);
 echo $response;
 
 //get the inserted primary key
