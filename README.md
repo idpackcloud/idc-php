@@ -1,4 +1,4 @@
-[![idc-php](https://github.com/idpackcloud/idc-php/blob/main/examples/images/idpack_cloud.jpg)](https://github.com/idpackcloud/idc-php/blob/7e8be2e430e02a9dd8ed94dd5ae167f0b3b2b412/examples/images/idpack_cloud.jpg)
+[![idc-php](https://github.com/idpackcloud/idc-php/blob/main/examples/images/idpack_cloud_logo_small.jpg)](https://github.com/idpackcloud/idc-php/blob/7e8be2e430e02a9dd8ed94dd5ae167f0b3b2b412/examples/images/idpack_cloud_logo_small.jpg)
 
 # IDC PHP bindings
 
