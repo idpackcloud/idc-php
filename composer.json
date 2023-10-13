@@ -1,7 +1,7 @@
 {
     "name": "idpackcloud/idc-php",
     "type": "library",
-    "description": "A PHP library for communicating with the IDpack in the Cloud REST API and accessing the Badge Producer from your system.",
+    "description": "A PHP library for communicating with the IDpack Cloud API and accessing the Badge Producer from your system.",
     "homepage": "https://www.idpack.cloud/",
     "support": {
         "email": "support@idpack.cloud"
