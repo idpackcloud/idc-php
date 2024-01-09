@@ -10,8 +10,7 @@ PHP 5.6.0 and later.
 
 Not tested yet
 
-* PHP 8.0
-* PHP 8.1
+* PHP 8.x
 
 Manual Setup
 ========
