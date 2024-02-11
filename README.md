@@ -69,7 +69,7 @@ echo $response;
     "api_action": "get_record", 
     "api_queries_remaining": 8345,
     "api_software": "IDpack Cloud",
-    "api_version": "2.0.001",
+    "api_version": "2.0.004",
     "api_request_date": "2023-01-29 19:30:12"
   }
 }
@@ -111,6 +111,20 @@ echo $response;
 
 //get the inserted primary key
 $insert_id = $idc->getInsertID();
+```
+
+### Activate a record in a project.
+
+```php
+$response = $idc->set_record_active(['idc_id_number' => '10000']);
+echo $response;
+```
+
+### Desactivate a record in a project.
+
+```php
+$response = $idc->set_record_not_active(['idc_id_number' => '10000']);
+echo $response;
 ```
 
 ### Delete a record in a project.
