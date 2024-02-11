@@ -3,7 +3,7 @@
 //============================================================+
 // File name   : idc.class.php
 // Begin       : 2022-12-07
-// Last Update : 2023-10-13
+// Last Update : 2024-02-11
 // Author      : Martin Bourdages - IDpack Cloud - www.idpack.cloud - support@idpack.cloud
 // License     : MIT
 // -------------------------------------------------------------------
@@ -11,7 +11,7 @@
 //
 // This file is part of IDpack Cloud library.
 //
-// See LICENSE file for more information.
+// See the LICENSE file for more information.
 // -------------------------------------------------------------------
 //
 // Description :
@@ -25,7 +25,7 @@
 
 class IDpack {
 
-	const VERSION = '2.0.001';
+	const VERSION = '2.0.004';
 
 	// Protected properties
 
