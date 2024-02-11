@@ -25,7 +25,7 @@
 
 class IDpack {
 
-	const VERSION = '2.0.004';
+	const VERSION = '2.1.004';
 
 	// Protected properties
 
