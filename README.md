@@ -23,7 +23,7 @@ $idc = new IDpack('username', 'password', 'user_secret_key', 'project_secret_key
 or
 ```php
 require_once 'idc.class.php';
-$idc = new IDpackCloud();
+$idc = new IDpack();
 $idc->setUsername('username');
 $idc->setPassword('password');
 $idc->setUserSecretKey('user_secret_key');
