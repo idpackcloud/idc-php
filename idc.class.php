@@ -3,19 +3,19 @@
 //============================================================+
 // File name   : idc.class.php
 // Begin       : 2022-12-07
-// Last Update : 2024-02-11
-// Author      : Martin Bourdages - IDpack Cloud - www.idpack.cloud - support@idpack.cloud
+// Last Update : 2024-03-02
+// Author      : Martin Bourdages - IDpack Cloud
 // License     : MIT
 // -------------------------------------------------------------------
 // Copyright (C) 2023 Martin Bourdages - IDpack Cloud
 //
 // This file is part of IDpack Cloud library.
 //
-// See the LICENSE file for more information.
+// See LICENSE file for more information.
 // -------------------------------------------------------------------
 //
 // Description :
-//    A PHP library for communicating with the IDpack Cloud API and accessing the Badge Producer from your system.
+//    A PHP library for communicating with the IDpack Cloud REST API and accessing the Badge Producer from your system.
 //
 //============================================================+
 
@@ -25,7 +25,7 @@
 
 class IDpack {
 
-	const VERSION = '2.1.004';
+	const VERSION = '2.1.8';
 
 	// Protected properties
 
@@ -56,6 +56,7 @@ class IDpack {
 	protected $api_authorization = 'basic';
 	protected $api_base_url = 'https://api.idpack.cloud';
 	protected $api_resource = '/producer/';
+	protected $api_get_keys = 0;
 
 	public function __construct($username = '', $password = '', $user_secret_key = '', $project_secret_key = '') {
 		$this->username = $username;
@@ -238,16 +239,18 @@ class IDpack {
 	 * @param null|int $api_badge_preview_number Select Duplex (0), Front (1), or Back (2) for the Badge Preview
 	 * @return string Return API response
 	*/
-	public function get_record($api_primary_key=array(), $api_photo_id=0, $api_photo_id_format=null, $api_badge_preview=0, $api_badge_preview_format=null, $api_badge_preview_number=0) : string
+	public function get_record($api_primary_key=array(), $api_photo_id=0, $api_photo_id_format=null, $api_badge_preview=0, $api_badge_preview_format=null, $api_badge_preview_number=0, $api_get_keys=0) : string
 	{
 		$this->api_action = strtolower(__FUNCTION__);
 		$response = $this->isPrimaryKey($api_primary_key);
 		if($response <> 1) {
 			return $response;
 		}
+		
 		$this->payload_array += ['api' => [
 			'api_primary_key' => $api_primary_key]
 		];
+
 		if ($this->isBool($api_photo_id)) {
 			$api_photo_id_format = strtolower($api_photo_id_format);
 			if (!in_array($api_photo_id_format, $this->valid_photo_id_format)) {
@@ -257,6 +260,11 @@ class IDpack {
 				$this->payload_array['api'] += ['api_photo_id_format' => $api_photo_id_format];
 			}
 		}
+
+		if (isBool($api_get_keys)) {
+			$this->payload_array['api'] += ['api_get_keys' => 1];
+		}
+
 		if ($this->isBool($api_badge_preview)) {
 			$api_badge_preview_format = strtolower($api_badge_preview_format);
 			if (!in_array($api_badge_preview_format, $this->valid_badge_preview_format)) {
@@ -277,10 +285,18 @@ class IDpack {
 	/**
 	 * @return string Return API response
 	*/
-	public function get_all_records() : string
+	public function get_all_records($api_get_keys=0) : string
 	{
 		$this->api_action = strtolower(__FUNCTION__);
-		$this->payload_array += ['api' => []];
+
+		if (isBool($api_get_keys)) {
+			$this->payload_array += ['api' => [
+				'api_get_keys' => 1]
+			];
+		} else {
+			$this->payload_array += ['api' => []];
+		}
+		
 		return $this->getResponse();
 	}
 
