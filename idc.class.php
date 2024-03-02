@@ -79,7 +79,7 @@ class IDpack {
 		}
 		$error_response += ['api' => [
 			'api_authorization' => $this->api_authorization,
-			'idc_php_version' => self::VERSION]
+			'api_version' => self::VERSION]
 		];
 		return json_encode($error_response);
 	}
@@ -134,7 +134,7 @@ class IDpack {
 			'api_action' => $this->api_action,
 			'api_output_format' => $this->api_output_format,
 			'api_authorization' => $this->api_authorization,
-			'idc_php_version' => self::VERSION];
+			'api_version' => self::VERSION];
 		$this->payload_json = json_encode($this->payload_array);
 		$headers = [
 			'Accept-Language:en-US',
