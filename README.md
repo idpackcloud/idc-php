@@ -69,7 +69,7 @@ echo $response;
     "api_action": "get_record", 
     "api_queries_remaining": 8345,
     "api_software": "IDpack Cloud",
-    "api_version": "2.1.004",
+    "api_version": "2.1.8",
     "api_request_date": "2023-01-29 19:30:12"
   }
 }
