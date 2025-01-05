@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.26 - 2025-01-05
+* Upgraded Compact cURL Setup: Used curl_setopt_array to configure cURL.
+* Updated IDpack API to send the Check-In/Check-Out status.
+* Updated IDpack API to update the Check-In/Check-Out status.
+* Changed IDpack Cloud - API to IDpack API
+  
 ## 2.1.8 - 2024-03-02
 * Added api_get_keys (default: 0) Set to 1 to get idc_key from record(s) and idc_project in the response.
   
