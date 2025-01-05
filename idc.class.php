@@ -3,11 +3,11 @@
 //============================================================+
 // File name   : idc.class.php
 // Begin       : 2022-12-07
-// Last Update : 2024-03-02
+// Last Update : 2025-01-05
 // Author      : Martin Bourdages - IDpack Cloud
 // License     : MIT
 // -------------------------------------------------------------------
-// Copyright (C) 2023 Martin Bourdages - IDpack Cloud
+// Copyright (C) 2025 Martin Bourdages - IDpack Cloud
 //
 // This file is part of IDpack Cloud library.
 //
@@ -15,7 +15,7 @@
 // -------------------------------------------------------------------
 //
 // Description :
-//    A PHP library for communicating with the IDpack Cloud REST API and accessing the Badge Producer from your system.
+//    A PHP library for communicating with the IDpack Cloud REST API and accessing the Producer from your system.
 //
 //============================================================+
 
@@ -25,7 +25,7 @@
 
 class IDpack {
 
-	const VERSION = '2.1.8';
+	const VERSION = '3.2.26';
 
 	// Protected properties
 
@@ -99,7 +99,7 @@ class IDpack {
 		}
 	}
 
-	protected function isPrimaryKey($api_primary_key=array()) : string
+	protected function isPrimaryKey(array $api_primary_key = []) : string
 	{
 		if (empty($api_primary_key)) {
 			return $this->getErrorResponse('api_primary_key can\'t be empty.', 720);
@@ -121,6 +121,7 @@ class IDpack {
 		if (empty($this->payload_array)) {
 			return $this->getErrorResponse('payload can\'t be empty!', 600);
 		}
+
 		if (($this->api_action == 'get_photo_id') or ($this->api_action == 'get_badge_preview')) {
 			if (!in_array($this->api_output_format, $this->valid_output_format2)) {
 				return $this->getErrorResponse('invalid api_output_format: '.$this->api_output_format, 610);
@@ -130,64 +131,79 @@ class IDpack {
 				return $this->getErrorResponse('invalid api_output_format: '.$this->api_output_format, 610);
 			}
 		}
+
 		$this->payload_array['api'] += [
 			'api_action' => $this->api_action,
 			'api_output_format' => $this->api_output_format,
 			'api_authorization' => $this->api_authorization,
-			'api_version' => self::VERSION];
+			'api_version' => self::VERSION
+		];
 		$this->payload_json = json_encode($this->payload_array);
+
 		$headers = [
 			'Accept-Language:en-US',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length:'.strlen($this->payload_json)
 		];
+
 		// Init cURL
 		try {
 			$ch = curl_init();
 			if ($ch === false) {
 				return $this->getErrorResponse('failed to initialize cURL', 620);
 			}
+
 			// Setup cURL
-			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); // Return content
-			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); // Don't verify the certificate's name against host
-			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); // Don't verify the peer's ssl certificate
-			curl_setopt($ch, CURLOPT_HEADER, false); // Don't return headers
-			curl_setopt($ch, CURLOPT_POST, true); // Post JSON to URL
-			curl_setopt($ch, CURLOPT_POSTFIELDS, $this->payload_json); // Payload to post
-			curl_setopt($ch, CURLOPT_TIMEOUT_MS, 15000); // The maximum number of milliseconds (15 sec.) to allow cURL functions to execute
-			curl_setopt($ch, CURLOPT_URL, $this->api_base_url.$this->api_resource); // IDC URL
-			curl_setopt($ch, CURLOPT_HTTPHEADER, $headers); // Array of http header fields
+			curl_setopt_array($ch, [
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_SSL_VERIFYHOST => false,
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_HEADER => false,
+				CURLOPT_POST => true,
+				CURLOPT_POSTFIELDS => $this->payload_json,
+				CURLOPT_TIMEOUT_MS => 15000,
+				CURLOPT_URL => $this->api_base_url.$this->api_resource,
+				CURLOPT_HTTPHEADER => $headers
+			]);
+	
+			// Basic Authorization
 			if ($this->api_authorization == 'basic') {
-				curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC); // The http authentication method(s) to use.
-				curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password); // A username and password to use for the connection.
+				curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+				curl_setopt($ch, CURLOPT_USERPWD, $this->username.':'.$this->password);
 			}
-			$response = curl_exec($ch); // Execute cURL
+
+			// Execute cURL
+			$response = curl_exec($ch); 
 			if ($response === false) {
 				return $this->getErrorResponse('cURL error: '.curl_error($ch).' '. curl_errno($ch), 630);
-			} else {
-				$this->server_ip = curl_getinfo($ch, CURLINFO_PRIMARY_IP);
-				$this->server_http_return_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-				if ($this->server_http_return_code == 401) {
-					return $this->getErrorResponse('HTTP/1.0 401 Unauthorized.', $this->server_http_return_code);
-				} elseif ($this->server_http_return_code == 500) {
-					return $this->getErrorResponse('HTTP/1.0 500 IDC API - Server Error.', $this->server_http_return_code);
-				} elseif ($this->server_http_return_code <> 200) {
-					return $this->getErrorResponse('Unexpected '.$this->server_http_return_code.' HTTP code.', $this->server_http_return_code);
-				} else  {
-					if (empty($response)) {
-						return $this->getErrorResponse('Response is empty!', 640);
-					} else {
-						if ($this->api_action == 'insert_record') {
-							$response_array = json_decode($response, 1);
-							if (isset($response_array['data']['idc_id_number'])) {
-								$this->insert_id = $response_array['data']['idc_id_number'];
-							}
-						}
-						return $response;
-					}
+			} 
+
+			$this->server_ip = curl_getinfo($ch, CURLINFO_PRIMARY_IP);
+			$this->server_http_return_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+			if ($this->server_http_return_code == 401) {
+				return $this->getErrorResponse('HTTP/1.0 401 Unauthorized.', $this->server_http_return_code);
+			} elseif ($this->server_http_return_code == 500) {
+				return $this->getErrorResponse('HTTP/1.0 500 IDC API - Server Error.', $this->server_http_return_code);
+			} elseif ($this->server_http_return_code <> 200) {
+				return $this->getErrorResponse('Unexpected '.$this->server_http_return_code.' HTTP code.', $this->server_http_return_code);
+			} 
+
+			if (empty($response)) {
+				return $this->getErrorResponse('Response is empty!', 640);
+			}
+
+			if ($this->api_action == 'insert_record') {
+				$response_array = json_decode($response, 1);
+				if (isset($response_array['data']['idc_id_number'])) {
+					$this->insert_id = $response_array['data']['idc_id_number'];
 				}
 			}
+
+			return $response;
+				
+			
 		} catch (Exception $e) {
 			return $this->getErrorResponse('caught exception: '.$e->getMessage(), 650);
 		}		
@@ -239,7 +255,7 @@ class IDpack {
 	 * @param null|int $api_badge_preview_number Select Duplex (0), Front (1), or Back (2) for the Badge Preview
 	 * @return string Return API response
 	*/
-	public function get_record($api_primary_key=array(), $api_photo_id=0, $api_photo_id_format=null, $api_badge_preview=0, $api_badge_preview_format=null, $api_badge_preview_number=0, $api_get_keys=0) : string
+	public function get_record(array $api_primary_key = [], $api_photo_id=0, $api_photo_id_format=null, $api_badge_preview=0, $api_badge_preview_format=null, $api_badge_preview_number=0, $api_get_keys=0) : string
 	{
 		$this->api_action = strtolower(__FUNCTION__);
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -296,7 +312,7 @@ class IDpack {
 		} else {
 			$this->payload_array += ['api' => []];
 		}
-		
+
 		return $this->getResponse();
 	}
 
@@ -305,7 +321,7 @@ class IDpack {
 	 * @param null|string $api_photo_id_format Photo ID image format
 	 * @return string Return API response
 	*/
-	public function get_photo_id($api_primary_key=array(), $api_photo_id_format=null) : string
+	public function get_photo_id(array $api_primary_key = [], $api_photo_id_format=null) : string
 	{
 		$this->api_action = strtolower(__FUNCTION__);
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -330,7 +346,7 @@ class IDpack {
 	 * @param null|int $api_badge_preview_number Select Duplex (0), Front (1), or Back (2) for the Badge Preview
 	 * @return string Return API response
 	*/
-	public function get_badge_preview($api_primary_key=array(), $api_badge_preview_format=null, $api_badge_preview_number=0) : string
+	public function get_badge_preview(array $api_primary_key = [], $api_badge_preview_format=null, $api_badge_preview_number=0) : string
 	{
 		$this->api_action = strtolower(__FUNCTION__);
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -359,7 +375,7 @@ class IDpack {
 	 * @param array $api_data An array for the fields
 	 * @return string Return API response
 	*/
-	public function update_record($api_primary_key=array(), $api_data=array()) : string
+	public function update_record(array $api_primary_key = [], $api_data=array()) : string
 	{
 		$this->api_action = strtolower(__FUNCTION__);
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -396,7 +412,7 @@ class IDpack {
 	 * @param array $api_primary_key An array for the Primary Key
 	 * @return string Return API response
 	*/
-	public function delete_record($api_primary_key=array()) : string
+	public function delete_record(array $api_primary_key = []) : string
 	{
 		$this->api_action = 'update_record';
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -415,7 +431,7 @@ class IDpack {
 	 * @param array $api_primary_key An array for the Primary Key
 	 * @return string Return API response
 	*/
-	public function set_record_active($api_primary_key=array()) : string
+	public function set_record_active(array $api_primary_key = []) : string
 	{
 		$this->api_action = 'update_record';
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -434,7 +450,7 @@ class IDpack {
 	 * @param array $api_primary_key An array for the Primary Key
 	 * @return string Return API response
 	*/
-	public function set_record_not_active($api_primary_key=array()) : string
+	public function set_record_not_active(array $api_primary_key = []) : string
 	{
 		$this->api_action = 'update_record';
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -453,7 +469,7 @@ class IDpack {
 	 * @param array $api_primary_key An array for the Primary Key
 	 * @return string Return API response
 	*/
-	public function set_record_trash($api_primary_key=array()) : string
+	public function set_record_trash(array $api_primary_key = []) : string
 	{
 		$this->api_action = 'update_record';
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -472,7 +488,7 @@ class IDpack {
 	 * @param array $api_primary_key An array for the Primary Key
 	 * @return string Return API response
 	*/
-	public function set_record_not_trash($api_primary_key=array()) : string
+	public function set_record_not_trash(array $api_primary_key = []) : string
 	{
 		$this->api_action = 'update_record';
 		$response = $this->isPrimaryKey($api_primary_key);
@@ -486,6 +502,51 @@ class IDpack {
 		$this->payload_array += ['data' => $api_data];
 		return $this->getResponse();
 	}
+
+	/**
+	 * @param array $api_primary_key An array for the Primary Key
+	 * @return string Return API response
+	*/
+	public function set_record_check_in(array $api_primary_key = []) : string
+	{
+		$this->api_action = 'update_record';
+
+		$response = $this->isPrimaryKey($api_primary_key);
+		if ($response != 1) {
+			return $response;
+		}
+
+		$this->payload_array += [
+			'api' => ['api_primary_key' => $api_primary_key],
+			'data' => ['idc_check_in' => '1']
+		];
+
+		return $this->getResponse();
+	}
+
+	/**
+	 * Set record to check out
+	 * 
+	 * @param array $api_primary_key An array for the Primary Key
+	 * @return string Return API response
+	 */
+	public function set_record_check_out(array $api_primary_key = []) : string
+	{
+		$this->api_action = 'update_record';
+
+		$response = $this->isPrimaryKey($api_primary_key);
+		if ($response != 1) {
+			return $response;
+		}
+
+		$this->payload_array += [
+			'api' => ['api_primary_key' => $api_primary_key],
+			'data' => ['idc_check_in' => '0']
+		];
+
+		return $this->getResponse();
+	}
+
 
 } // END OF IDPACK CLASS
 
